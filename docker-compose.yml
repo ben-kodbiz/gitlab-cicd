@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    image: customregistry/redis-faas:stable
+    restart: always
+    ports:
+      - "3032:80"
+    volumes:
+      - ./vols/phpsessions:/tmp/phpsessions
+    env_file:
+      - ./.env
+    networks:
+      - application
+  db:
+    image: mariadb:10.3.6
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - ./vols/mariadb/data:/var/lib/mysql
+    networks:
+      - bestfotok
+
+networks:
+    application:
+        external:
+            name: ${NETWORK_NAME}
